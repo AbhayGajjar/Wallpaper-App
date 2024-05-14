@@ -46,6 +46,15 @@ const HomeScreen = () => {
 
     const handlechangecategory = (cat) => {
         setActiveCategory(cat);
+        clearsearch();
+        setimages([]);
+        page = 1;
+        let params = {
+            page,
+        }
+        if (cat) params.category = cat;
+        fetchimages(params, false);
+
 
     }
 
@@ -55,14 +64,16 @@ const HomeScreen = () => {
         if (text.length > 2) {
             page = 1;
             setimages([]);
-            fetchimages({ page, q: text })
+            setActiveCategory(null);
+            fetchimages({ page, q: text }, false)
 
         }
         if (text == "") {
             page = 1;
             searchInputRef?.current?.clear();
             setimages([]);
-            fetchimages({ page })
+            setActiveCategory(null); //reset active category
+            fetchimages({ page }, false)
         }
     }
     const handleTextDebounce = useCallback(debounce(handlesearch, 400), []);
